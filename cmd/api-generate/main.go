@@ -1,15 +1,16 @@
-// The schema-generate binary reads the JSON schema files passed as arguments
+// The api-generate binary reads the JSON schema files passed as arguments
 // and outputs the corresponding Go structs.
 package main
 
 import (
 	"flag"
 	"fmt"
-	io2 "github.com/alejandroesc/generate/pkg/io"
 	"io"
 	"os"
 
 	"github.com/alejandroesc/generate/pkg/generate"
+
+	generateIO "github.com/alejandroesc/generate/pkg/io"
 )
 
 var (
@@ -39,7 +40,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	schemas, err := io2.ReadInputFiles(inputFiles, *schemaKeyRequiredFlag)
+	schemas, err := generateIO.ReadInputFiles(inputFiles, *schemaKeyRequiredFlag)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
@@ -64,5 +65,5 @@ func main() {
 		}
 	}
 
-	io2.Output(w, g, *p)
+	generateIO.Output(w, g, *p)
 }
