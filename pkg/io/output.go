@@ -1,4 +1,4 @@
-package generate
+package io
 
 import (
 	"bytes"
@@ -6,9 +6,11 @@ import (
 	"io"
 	"sort"
 	"strings"
+
+	"github.com/alejandroesc/generate/pkg/generate"
 )
 
-func getOrderedFieldNames(m map[string]Field) []string {
+func getOrderedFieldNames(m map[string]generate.Field) []string {
 	keys := make([]string, len(m))
 	idx := 0
 	for k := range m {
@@ -19,7 +21,7 @@ func getOrderedFieldNames(m map[string]Field) []string {
 	return keys
 }
 
-func getOrderedStructNames(m map[string]Struct) []string {
+func getOrderedStructNames(m map[string]generate.Struct) []string {
 	keys := make([]string, len(m))
 	idx := 0
 	for k := range m {
@@ -31,7 +33,7 @@ func getOrderedStructNames(m map[string]Struct) []string {
 }
 
 // Output generates code and writes to w.
-func Output(w io.Writer, g *Generator, pkg string) {
+func Output(w io.Writer, g *generate.Generator, pkg string) {
 	structs := g.Structs
 	aliases := g.Aliases
 
@@ -98,7 +100,7 @@ func Output(w io.Writer, g *Generator, pkg string) {
 	w.Write(codeBuf.Bytes())
 }
 
-func emitMarshalCode(w io.Writer, s Struct, imports map[string]bool) {
+func emitMarshalCode(w io.Writer, s generate.Struct, imports map[string]bool) {
 	imports["bytes"] = true
 	fmt.Fprintf(w,
 		`
@@ -178,7 +180,7 @@ func (strct *%s) MarshalJSON() ([]byte, error) {
 `)
 }
 
-func emitUnmarshalCode(w io.Writer, s Struct, imports map[string]bool) {
+func emitUnmarshalCode(w io.Writer, s generate.Struct, imports map[string]bool) {
 	imports["encoding/json"] = true
 	// unmarshal code
 	fmt.Fprintf(w, `

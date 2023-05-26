@@ -5,6 +5,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	io2 "github.com/alejandroesc/generate/pkg/io"
 	"io"
 	"os"
 
@@ -38,7 +39,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	schemas, err := generate.ReadInputFiles(inputFiles, *schemaKeyRequiredFlag)
+	schemas, err := io2.ReadInputFiles(inputFiles, *schemaKeyRequiredFlag)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, err.Error())
 		os.Exit(1)
@@ -63,5 +64,5 @@ func main() {
 		}
 	}
 
-	generate.Output(w, g, *p)
+	io2.Output(w, g, *p)
 }

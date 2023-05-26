@@ -1,13 +1,15 @@
-package generate
+package io
 
 import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/alejandroesc/generate/pkg/generate"
 )
 
 func TestThatFieldNamesAreOrdered(t *testing.T) {
-	m := map[string]Field{
+	m := map[string]generate.Field{
 		"z": {},
 		"b": {},
 	}
@@ -21,7 +23,7 @@ func TestThatFieldNamesAreOrdered(t *testing.T) {
 }
 
 func TestThatStructNamesAreOrdered(t *testing.T) {
-	m := map[string]Struct{
+	m := map[string]generate.Struct{
 		"c": {},
 		"b": {},
 		"a": {},

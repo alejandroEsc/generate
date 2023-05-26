@@ -1,4 +1,4 @@
-package generate
+package io
 
 import (
 	"encoding/json"
