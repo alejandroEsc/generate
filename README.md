@@ -107,4 +107,4 @@ type Status struct {
 }
 ```
 
-See the [test/](./test/) directory for more examples.
+See the [test/](testdata/) directory for more examples.

@@ -5,8 +5,6 @@ import (
 	"log"
 	"reflect"
 	"testing"
-
-	"github.com/a-h/generate/test/additionalProperties2_gen"
 )
 
 func TestMarshalUnmarshal(t *testing.T) {
@@ -18,11 +16,11 @@ func TestMarshalUnmarshal(t *testing.T) {
 		{
 			Name: "Base Object",
 			Strct: additionalProperties2.AdditionalProperties{
-				Property1: "test",
+				Property1: "testdata",
 			},
 			Validation: func(t *testing.T, prop *additionalProperties2.AdditionalProperties) {
-				if prop.Property1 != "test" {
-					t.Fatal("property1 != test")
+				if prop.Property1 != "testdata" {
+					t.Fatal("property1 != testdata")
 				}
 			},
 		},

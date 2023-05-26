@@ -21,9 +21,9 @@ clean:
 # Test
 
 # generate sources
-JSON := $(wildcard test/*.json)
+JSON := $(wildcard test/files/*.json)
 GENERATED_SOURCE := $(patsubst %.json,%_gen/generated.go,$(JSON))
-test/%_gen/generated.go: test/%.json 
+test/%_gen/generated.go: testdata
 	@echo "\n+ Generating code for $@"
 	@D=$(shell echo $^ | sed 's/.json/_gen/'); \
 	[ ! -d $$D ] && mkdir -p $$D || true

@@ -46,16 +46,16 @@ func TestFieldGeneration(t *testing.T) {
 	properties := map[string]*Schema{
 		"property1": {TypeValue: "string"},
 		"property2": {Reference: "#/definitions/address"},
-		// test sub-objects with properties or additionalProperties
+		// testdata sub-objects with properties or additionalProperties
 		"property3": {TypeValue: "object", Title: "SubObj1", Properties: map[string]*Schema{"name": {TypeValue: "string"}}},
 		"property4": {TypeValue: "object", Title: "SubObj2", AdditionalProperties: &AdditionalProperties{TypeValue: "integer"}},
-		// test sub-objects with properties composed of objects
+		// testdata sub-objects with properties composed of objects
 		"property5": {TypeValue: "object", Title: "SubObj3", Properties: map[string]*Schema{"SubObj3a": {TypeValue: "object", Properties: map[string]*Schema{"subproperty1": {TypeValue: "integer"}}}}},
-		// test sub-objects with additionalProperties composed of objects
+		// testdata sub-objects with additionalProperties composed of objects
 		"property6": {TypeValue: "object", Title: "SubObj4", AdditionalProperties: &AdditionalProperties{TypeValue: "object", Title: "SubObj4a", Properties: map[string]*Schema{"subproperty1": {TypeValue: "integer"}}}},
-		// test sub-objects without titles
+		// testdata sub-objects without titles
 		"property7": {TypeValue: "object"},
-		// test sub-objects with properties AND additionalProperties
+		// testdata sub-objects with properties AND additionalProperties
 		"property8": {TypeValue: "object", Title: "SubObj5", Properties: map[string]*Schema{"name": {TypeValue: "string"}}, AdditionalProperties: &AdditionalProperties{TypeValue: "integer"}},
 	}
 
@@ -75,7 +75,7 @@ func TestFieldGeneration(t *testing.T) {
 	g := New(&root)
 	err := g.CreateTypes()
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to get the fields: ", err)
@@ -153,7 +153,7 @@ func TestFieldGenerationWithArrayReferences(t *testing.T) {
 	g := New(&root)
 	err := g.CreateTypes()
 
-	//Output(os.Stderr, g, "test")
+	//Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to get the fields: ", err)
@@ -202,7 +202,7 @@ func TestNestedStructGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	//Output(os.Stderr, g, "test")
+	//Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to create structs: ", err)
@@ -243,7 +243,7 @@ func TestEmptyNestedStructGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to create structs: ", err)
@@ -316,7 +316,7 @@ func TestStructGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to create structs: ", err)
@@ -347,7 +347,7 @@ func TestArrayGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Fatal("Failed to create structs: ", err)
@@ -405,7 +405,7 @@ func TestNestedArrayGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to create structs: ", err)
@@ -487,7 +487,7 @@ func TestMultipleSchemaStructGeneration(t *testing.T) {
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Error("Failed to create structs: ", err)
@@ -550,7 +550,7 @@ func TestThatJavascriptKeyNamesCanBeConvertedToValidGoNames(t *testing.T) {
 		actual := getGolangName(test.input)
 
 		if test.expected != actual {
-			t.Errorf("For test '%s', for input '%s' expected '%s' but got '%s'.", test.description, test.input, test.expected, actual)
+			t.Errorf("For testdata '%s', for input '%s' expected '%s' but got '%s'.", test.description, test.input, test.expected, actual)
 		}
 	}
 }
@@ -571,7 +571,7 @@ func TestThatArraysWithoutDefinedItemTypesAreGeneratedAsEmptyInterfaces(t *testi
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Errorf("Error generating structs: %v", err)
@@ -605,7 +605,7 @@ func TestThatTypesWithMultipleDefinitionsAreGeneratedAsEmptyInterfaces(t *testin
 	err := g.CreateTypes()
 	results := g.Structs
 
-	// Output(os.Stderr, g, "test")
+	// Output(os.Stderr, g, "testdata")
 
 	if err != nil {
 		t.Errorf("Error generating structs: %v", err)
@@ -755,7 +755,7 @@ func TestTypeAliases(t *testing.T) {
 		structs := g.Structs
 		aliases := g.Aliases
 
-		// Output(os.Stderr, g, "test")
+		// Output(os.Stderr, g, "testdata")
 
 		if err != nil {
 			t.Fatal(err)

@@ -2,7 +2,6 @@ package test
 
 import (
 	"testing"
-	"github.com/a-h/generate/test/abandoned_gen"
 )
 
 func TestAbandoned(t *testing.T) {
@@ -11,8 +10,8 @@ func TestAbandoned(t *testing.T) {
 		Name:      "jonson",
 		Abandoned: &abandoned.PackageList{},
 	}
-	// the test is the presence of the Abandoned field
+	// the testdata is the presence of the Abandoned field
 	if r.Abandoned == nil {
-		t.Fatal("thats the test")
+		t.Fatal("thats the testdata")
 	}
 }
