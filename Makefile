@@ -1,6 +1,6 @@
 PKG := .
-CMD := $(PKG)/cmd/api-generate
-BIN := schema-generate
+CMD := $(PKG)/cmd/generate-api
+BIN := $(PKG)/bin
 
 # Build
 
@@ -8,15 +8,17 @@ BIN := schema-generate
 
 all: clean $(BIN)
 
-$(BIN): generator.go jsonschema.go cmd/api-generate
+.PHONY: build
+build: cmd/generate-api
+	mkdir -p $(BIN) || true
 	@echo "+ Building $@"
-	CGO_ENABLED="0" go build -v -o $@ $(CMD)
+	CGO_ENABLED="0" go build -v -o $(BIN) $(CMD)
 
 clean:
 	@echo "+ Cleaning $(PKG)"
 	go clean -i $(PKG)/...
-	rm -f $(BIN)
-	rm -rf test/*_gen
+	rm -rf $(BIN)
+	rm -rf testdata/*_gen
 
 # Test
 

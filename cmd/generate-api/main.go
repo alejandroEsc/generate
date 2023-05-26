@@ -1,4 +1,4 @@
-// The api-generate binary reads the JSON schema files passed as arguments
+// The generate-api binary reads the JSON schema files passed as arguments
 // and outputs the corresponding Go structs.
 package main
 
