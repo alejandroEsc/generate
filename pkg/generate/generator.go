@@ -201,7 +201,7 @@ func (g *Generator) processObject(name string, schema *jsonschema.Schema) (typ s
 			Description: prop.Description,
 		}
 		if f.Required {
-			strct.GenerateCode = true
+			strct.GenerateCode = false
 		}
 		strct.Fields[f.Name] = f
 	}
@@ -235,7 +235,7 @@ func (g *Generator) processObject(name string, schema *jsonschema.Schema) (typ s
 		}
 		strct.Fields[f.Name] = f
 		// setting this will cause marshal code to be emitted in Output()
-		strct.GenerateCode = true
+		strct.GenerateCode = false
 		strct.AdditionalType = subTyp
 	}
 	// additionalProperties as either true (everything) or false (nothing)
@@ -252,11 +252,11 @@ func (g *Generator) processObject(name string, schema *jsonschema.Schema) (typ s
 			}
 			strct.Fields[f.Name] = f
 			// setting this will cause marshal code to be emitted in Output()
-			strct.GenerateCode = true
+			strct.GenerateCode = false
 			strct.AdditionalType = "interface{}"
 		} else {
 			// nothing
-			strct.GenerateCode = true
+			strct.GenerateCode = false
 			strct.AdditionalType = "false"
 		}
 	}
