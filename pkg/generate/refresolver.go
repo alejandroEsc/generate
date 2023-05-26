@@ -5,17 +5,19 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+
+	"github.com/alejandroesc/generate/pkg/jsonschema"
 )
 
 // RefResolver allows references to be resolved.
 type RefResolver struct {
-	schemas []*Schema
+	schemas []*jsonschema.Schema
 	//           k=uri     v=Schema
-	pathToSchema map[string]*Schema
+	pathToSchema map[string]*jsonschema.Schema
 }
 
 // NewRefResolver creates a reference resolver.
-func NewRefResolver(schemas []*Schema) *RefResolver {
+func NewRefResolver(schemas []*jsonschema.Schema) *RefResolver {
 	return &RefResolver{
 		schemas: schemas,
 	}
@@ -23,7 +25,7 @@ func NewRefResolver(schemas []*Schema) *RefResolver {
 
 // Init the resolver.
 func (r *RefResolver) Init() error {
-	r.pathToSchema = make(map[string]*Schema)
+	r.pathToSchema = make(map[string]*jsonschema.Schema)
 	for _, v := range r.schemas {
 		if err := r.mapPaths(v); err != nil {
 			return err
@@ -33,7 +35,7 @@ func (r *RefResolver) Init() error {
 }
 
 // recusively generate path to schema
-func getPath(schema *Schema, path string) string {
+func getPath(schema *jsonschema.Schema, path string) string {
 	path = schema.PathElement + "/" + path
 	if schema.IsRoot() {
 		return path
@@ -42,7 +44,7 @@ func getPath(schema *Schema, path string) string {
 }
 
 // GetPath generates a path to given schema.
-func (r *RefResolver) GetPath(schema *Schema) string {
+func (r *RefResolver) GetPath(schema *jsonschema.Schema) string {
 	if schema.IsRoot() {
 		return "#"
 	}
@@ -50,7 +52,7 @@ func (r *RefResolver) GetPath(schema *Schema) string {
 }
 
 // GetSchemaByReference returns the schema.
-func (r *RefResolver) GetSchemaByReference(schema *Schema) (*Schema, error) {
+func (r *RefResolver) GetSchemaByReference(schema *jsonschema.Schema) (*jsonschema.Schema, error) {
 	u, err := url.Parse(schema.GetRoot().ID())
 	if err != nil {
 		return nil, err
@@ -67,7 +69,7 @@ func (r *RefResolver) GetSchemaByReference(schema *Schema) (*Schema, error) {
 	return path, nil
 }
 
-func (r *RefResolver) mapPaths(schema *Schema) error {
+func (r *RefResolver) mapPaths(schema *jsonschema.Schema) error {
 	rootURI := &url.URL{}
 	id := schema.ID()
 	if id == "" {
@@ -95,7 +97,7 @@ func (r *RefResolver) mapPaths(schema *Schema) error {
 }
 
 // create a map of base URIs
-func (r *RefResolver) updateURIs(schema *Schema, baseURI url.URL, checkCurrentID bool, ignoreFragments bool) error {
+func (r *RefResolver) updateURIs(schema *jsonschema.Schema, baseURI url.URL, checkCurrentID bool, ignoreFragments bool) error {
 	// already done for root, and if schema sets a new base URI
 	if checkCurrentID {
 		id := schema.ID()
@@ -144,7 +146,7 @@ func (r *RefResolver) updateURIs(schema *Schema, baseURI url.URL, checkCurrentID
 	if schema.AdditionalProperties != nil {
 		newBaseURI := baseURI
 		newBaseURI.Fragment += "/additionalProperties"
-		r.updateURIs((*Schema)(schema.AdditionalProperties), newBaseURI, true, ignoreFragments)
+		r.updateURIs((*jsonschema.Schema)(schema.AdditionalProperties), newBaseURI, true, ignoreFragments)
 	}
 	if schema.Items != nil {
 		newBaseURI := baseURI
@@ -155,7 +157,7 @@ func (r *RefResolver) updateURIs(schema *Schema, baseURI url.URL, checkCurrentID
 }
 
 // InsertURI to the references.
-func (r *RefResolver) InsertURI(uri string, schema *Schema) error {
+func (r *RefResolver) InsertURI(uri string, schema *jsonschema.Schema) error {
 	if _, ok := r.pathToSchema[uri]; ok {
 		return fmt.Errorf("attempted to add duplicate uri: %s/%s", schema.GetRoot().ID(), uri)
 	}

@@ -8,11 +8,13 @@ import (
 	"net/url"
 	"os"
 	"path"
+
+	"github.com/alejandroesc/generate/pkg/jsonschema"
 )
 
 // ReadInputFiles from disk and convert to JSON schema.
-func ReadInputFiles(inputFiles []string, schemaKeyRequired bool) ([]*Schema, error) {
-	schemas := make([]*Schema, len(inputFiles))
+func ReadInputFiles(inputFiles []string, schemaKeyRequired bool) ([]*jsonschema.Schema, error) {
+	schemas := make([]*jsonschema.Schema, len(inputFiles))
 	for i, file := range inputFiles {
 		b, err := ioutil.ReadFile(file)
 		if err != nil {
@@ -29,7 +31,7 @@ func ReadInputFiles(inputFiles []string, schemaKeyRequired bool) ([]*Schema, err
 			Path:   abPath,
 		}
 
-		schemas[i], err = ParseWithSchemaKeyRequired(string(b), &fileURI, schemaKeyRequired)
+		schemas[i], err = jsonschema.ParseWithSchemaKeyRequired(string(b), &fileURI, schemaKeyRequired)
 		if err != nil {
 			if jsonError, ok := err.(*json.SyntaxError); ok {
 				line, character, lcErr := lineAndCharacter(b, int(jsonError.Offset))

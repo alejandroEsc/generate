@@ -1,4 +1,4 @@
-package generate
+package jsonschema
 
 import (
 	"net/url"

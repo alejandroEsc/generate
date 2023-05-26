@@ -6,11 +6,13 @@ import (
 	"fmt"
 	"strings"
 	"unicode"
+
+	"github.com/alejandroesc/generate/pkg/jsonschema"
 )
 
 // Generator will produce structs from the JSON schema.
 type Generator struct {
-	schemas  []*Schema
+	schemas  []*jsonschema.Schema
 	resolver *RefResolver
 	Structs  map[string]Struct
 	Aliases  map[string]Field
@@ -20,7 +22,7 @@ type Generator struct {
 }
 
 // New creates an instance of a generator which will produce structs.
-func New(schemas ...*Schema) *Generator {
+func New(schemas ...*jsonschema.Schema) *Generator {
 	return &Generator{
 		schemas:  schemas,
 		resolver: NewRefResolver(schemas),
@@ -59,7 +61,7 @@ func (g *Generator) CreateTypes() (err error) {
 }
 
 // process a block of definitions
-func (g *Generator) processDefinitions(schema *Schema) error {
+func (g *Generator) processDefinitions(schema *jsonschema.Schema) error {
 	for key, subSchema := range schema.Definitions {
 		if _, err := g.processSchema(getGolangName(key), subSchema); err != nil {
 			return err
@@ -69,7 +71,7 @@ func (g *Generator) processDefinitions(schema *Schema) error {
 }
 
 // process a reference string
-func (g *Generator) processReference(schema *Schema) (string, error) {
+func (g *Generator) processReference(schema *jsonschema.Schema) (string, error) {
 	schemaPath := g.resolver.GetPath(schema)
 	if schema.Reference == "" {
 		return "", errors.New("processReference empty reference: " + schemaPath)
@@ -91,7 +93,7 @@ func (g *Generator) processReference(schema *Schema) (string, error) {
 }
 
 // returns the type refered to by schema after resolving all dependencies
-func (g *Generator) processSchema(schemaName string, schema *Schema) (typ string, err error) {
+func (g *Generator) processSchema(schemaName string, schema *jsonschema.Schema) (typ string, err error) {
 	if len(schema.Definitions) > 0 {
 		g.processDefinitions(schema)
 	}
@@ -142,7 +144,7 @@ func (g *Generator) processSchema(schemaName string, schema *Schema) (typ string
 
 // name: name of this array, usually the js key
 // schema: items element
-func (g *Generator) processArray(name string, schema *Schema) (typeStr string, err error) {
+func (g *Generator) processArray(name string, schema *jsonschema.Schema) (typeStr string, err error) {
 	if schema.Items != nil {
 		// subType: fallback name in case this array contains inline object without a title
 		subName := g.getSchemaName(name+"Items", schema.Items)
@@ -173,7 +175,7 @@ func (g *Generator) processArray(name string, schema *Schema) (typeStr string, e
 // name: name of the struct (calculated by caller)
 // schema: detail incl properties & child objects
 // returns: generated type
-func (g *Generator) processObject(name string, schema *Schema) (typ string, err error) {
+func (g *Generator) processObject(name string, schema *jsonschema.Schema) (typ string, err error) {
 	strct := Struct{
 		ID:          schema.ID(),
 		Name:        name,
@@ -205,7 +207,7 @@ func (g *Generator) processObject(name string, schema *Schema) (typ string, err 
 	}
 	// additionalProperties with typed sub-schema
 	if schema.AdditionalProperties != nil && schema.AdditionalProperties.AdditionalPropertiesBool == nil {
-		ap := (*Schema)(schema.AdditionalProperties)
+		ap := (*jsonschema.Schema)(schema.AdditionalProperties)
 		apName := g.getSchemaName("", ap)
 		subTyp, err := g.processSchema(apName, ap)
 		if err != nil {
@@ -304,7 +306,7 @@ func getPrimitiveTypeName(schemaType string, subType string, pointer bool) (name
 }
 
 // return a name for this (sub-)schema.
-func (g *Generator) getSchemaName(keyName string, schema *Schema) string {
+func (g *Generator) getSchemaName(keyName string, schema *jsonschema.Schema) string {
 	if len(schema.Title) > 0 {
 		return getGolangName(schema.Title)
 	}

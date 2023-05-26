@@ -8,7 +8,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/a-h/generate/pkg/generate"
+	"github.com/alejandroesc/generate/pkg/generate"
 )
 
 var (
