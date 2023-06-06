@@ -8,18 +8,14 @@ Generates Go (golang) Structs and Validation code from JSON schema.
 
 # Usage
 
-Install
-
-```console
-$ go get -u github.com/a-h/generate/...
 ```
+make build
 
-or
+```
+followed by
 
-Build
-
-```console
-$ make
+```
+./bin/generate-api -i <path-to-schema>/values.schema.json -o <path-to-output>/values.go
 ```
 
 Run
