@@ -14,6 +14,12 @@ build: cmd/generate-api
 	@echo "+ Building $@"
 	CGO_ENABLED="0" go build -v -o $(BIN) $(CMD)
 
+.PHONY: install
+install: cmd/generate-api
+	mkdir -p $(BIN) || true
+	@echo "+ Building $@"
+	CGO_ENABLED="0" go install -v $(CMD)
+
 clean:
 	@echo "+ Cleaning $(PKG)"
 	go clean -i $(PKG)/...
