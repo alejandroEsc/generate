@@ -67,7 +67,7 @@ func Output(w io.Writer, g *generate.Generator, pkg string) {
 
 		fmt.Fprintln(w, "")
 		fmt.Fprintf(w, "// %s\n", a.Name)
-		fmt.Fprintf(w, "type %s %s\n", a.Name, a.Type)
+		fmt.Fprintf(w, "type %s %s\n", suggestedCaps(a.Name), a.Type)
 	}
 
 	for _, k := range getOrderedStructNames(structs) {
@@ -75,7 +75,7 @@ func Output(w io.Writer, g *generate.Generator, pkg string) {
 
 		fmt.Fprintln(w, "")
 		outputNameAndDescriptionComment(s.Name, s.Description, w)
-		fmt.Fprintf(w, "type %s struct {\n", s.Name)
+		fmt.Fprintf(w, "type %s struct {\n", suggestedCaps(s.Name))
 
 		for _, fieldKey := range getOrderedFieldNames(s.Fields) {
 			f := s.Fields[fieldKey]
@@ -90,7 +90,7 @@ func Output(w io.Writer, g *generate.Generator, pkg string) {
 				outputFieldDescriptionComment(f.Description, w)
 			}
 
-			fmt.Fprintf(w, "  %s %s `json:\"%s%s\"`\n", f.Name, f.Type, f.JSONName, omitempty)
+			fmt.Fprintf(w, "  %s %s `json:\"%s%s\"`\n", suggestedCaps(f.Name), suggestedCaps(f.Type), f.JSONName, omitempty)
 		}
 
 		fmt.Fprintln(w, "}")
