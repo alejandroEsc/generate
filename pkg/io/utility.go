@@ -31,7 +31,7 @@ func suggestedCaps(name string) string {
 	}
 
 	if strings.Contains(lowered, "dns") || strings.Contains(lowered, "Dns") {
-		lowered = strings.ReplaceAll(strings.ReplaceAll(lowered, "http", "HTTP"), "Dns", "HTTP")
+		lowered = strings.ReplaceAll(strings.ReplaceAll(lowered, "dns", "DNS"), "Dns", "DNS")
 	}
 
 	return lowered
